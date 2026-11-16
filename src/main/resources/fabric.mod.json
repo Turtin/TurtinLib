@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "turtinlib",
+  "version": "${version}",
+  "name": "TurtinLib",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/turtinlib/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "dev.turtin.turtinlib.client.TurtinlibClient"
+    ],
+    "main": [
+      "dev.turtin.turtinlib.Turtinlib"
+    ]
+  },
+  "mixins": [
+    "turtinlib.mixins.json",
+    {
+      "config": "turtinlib.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
