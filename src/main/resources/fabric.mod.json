@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "id": "turtinlib",
   "version": "${version}",
-  "name": "TurtinLib",
-  "description": "",
-  "authors": [],
+  "name": "Turtin Lib",
+  "description": "A library made by Turtin for various implementations",
+  "authors": ["Turtin"],
   "contact": {},
-  "license": "All-Rights-Reserved",
+  "license": "GNU GENERAL PUBLIC LICENSE",
   "icon": "assets/turtinlib/icon.png",
   "environment": "client",
   "entrypoints": {
@@ -15,6 +15,9 @@
     ],
     "main": [
       "dev.turtin.turtinlib.Turtinlib"
+    ],
+    "modmenu": [
+      "dev.turtin.turtinlib.client.modmenu.TurtinlibModMenuImpl"
     ]
   },
   "mixins": [
@@ -28,5 +31,14 @@
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
     "minecraft": "${minecraft_version}"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.wiki": "https://github.com/Turtin/TurtinLib",
+        "modmenu.github_releases": "https://github.com/Turtin/TurtinLib/releases"
+      },
+      "badges": [ "library" ]
+    }
   }
 }

@@ -3,6 +3,7 @@ package dev.turtin.turtinlib.client.command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import dev.turtin.turtinlib.client.command.annotations.Command;
+import dev.turtin.turtinlib.client.command.annotations.SubCommand;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
@@ -41,7 +42,7 @@ public class CommandRegistration {
 
     private static Method getExecutor(Class<?> c) {
         for (Method method : c.getMethods()) {
-            if (method.isAnnotationPresent(Command.class) && method.getName().equals("execute")) {
+            if ((method.isAnnotationPresent(Command.class) || method.isAnnotationPresent(SubCommand.class)) && method.getName().equals("execute")) {
                 return method;
             }
         }
@@ -75,10 +76,9 @@ public class CommandRegistration {
             }
 
             Method executor = getExecutor(subClass);
-            Command details = executor.getAnnotation(Command.class);
+            SubCommand details = executor.getAnnotation(SubCommand.class);
             cmdBuilder.then(literal(details.name()).executes(context -> invokeMethod(executor, context)));
-
-            register(subClass);
+            registerCommandModules(subClass, cmdBuilder);
         }
     }
 

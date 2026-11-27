@@ -12,5 +12,6 @@ import java.lang.annotation.Target;
 public @interface Argument {
     String name();
     Class<? extends ArgumentType<?>> type();
+    boolean required() default false;
 }
 

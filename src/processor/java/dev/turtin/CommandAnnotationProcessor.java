@@ -16,13 +16,16 @@ import java.util.Set;
 @SupportedAnnotationTypes("*")
 @SupportedSourceVersion(SourceVersion.RELEASE_25)
 public class CommandAnnotationProcessor extends AbstractProcessor {
-    String[] interfaces = {"dev.turtin.turtinlib.client.command.CommandHandler", "dev.turtin.turtinlib.client.command.SubCommand"};
+    String[] interfaces = {"dev.turtin.turtinlib.client.command.CommandHandler"};
+    TypeElement commandAnnotation;
+    TypeElement subCommandAnnotation;
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        TypeElement requiredAnnotation = processingEnv.getElementUtils().getTypeElement("dev.turtin.turtinlib.client.command.annotations.Command");
+        commandAnnotation = processingEnv.getElementUtils().getTypeElement("dev.turtin.turtinlib.client.command.annotations.Command");
+        subCommandAnnotation = processingEnv.getElementUtils().getTypeElement("dev.turtin.turtinlib.client.command.annotations.SubCommand");
 
-        if (requiredAnnotation == null) {
+        if (commandAnnotation == null) {
             return false;
         }
 
@@ -31,14 +34,22 @@ public class CommandAnnotationProcessor extends AbstractProcessor {
                 if (type.getKind() != ElementKind.CLASS) {
                     continue;
                 }
-                checkClass(type, requiredAnnotation);
+                checkClass(type);
             }
         });
 
         return false;
     }
 
-    private void checkClass(TypeElement type, TypeElement requiredAnnotation) {
+    private void checkClass(TypeElement type) {
+        TypeElement requiredAnnotation;
+
+        if (type.getNestingKind() == NestingKind.TOP_LEVEL) {
+            requiredAnnotation = commandAnnotation;
+        } else {
+            requiredAnnotation = subCommandAnnotation;
+        }
+
         List<TypeElement> interfaceElements = new ArrayList<>();
         for (String i : interfaces) {
             interfaceElements.add(processingEnv.getElementUtils().getTypeElement(i));
@@ -51,8 +62,8 @@ public class CommandAnnotationProcessor extends AbstractProcessor {
 
                 for (ExecutableElement method : classMethods) {
                     if (interfaceMethods.stream().anyMatch((iMethod) -> processingEnv.getElementUtils().overrides(method, iMethod, type))) {
-                        if (!method.getAnnotationMirrors().stream().anyMatch((annotation) -> processingEnv.getTypeUtils().isSameType(annotation.getAnnotationType(), requiredAnnotation.asType()))) {
-                            processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Missing annotation, try adding \"@Command(name={...})\"", method);
+                        if (method.getAnnotationMirrors().stream().noneMatch((annotation) -> processingEnv.getTypeUtils().isSameType(annotation.getAnnotationType(), requiredAnnotation.asType()))) {
+                            processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Missing annotation, try adding \"@" + requiredAnnotation.getSimpleName() +"(name={...})\"", method);
                         }
                         processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "Annotations passing for " + type.getQualifiedName());
                     }
@@ -62,7 +73,7 @@ public class CommandAnnotationProcessor extends AbstractProcessor {
 
         for (TypeElement element : ElementFilter.typesIn(type.getEnclosedElements())) { // Check inner classes
             if (element.getKind() == ElementKind.CLASS) {
-                checkClass(element, requiredAnnotation);
+                checkClass(element);
             }
         }
     }
