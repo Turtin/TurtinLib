@@ -15,7 +15,7 @@ repositories {
 
 dependencies {
     implementation "com.github.Turtin:TurtinLib:${project.turtinlib_version}"
-    annotationProcessor "com.github.Turtin:TurtinLib:${project.turtinlib_version}:processor'"
+    annotationProcessor "com.github.Turtin:TurtinLib:${project.turtinlib_version}:processor"
 }
 ```
 
