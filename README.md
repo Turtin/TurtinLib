@@ -14,8 +14,14 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.Turtin:TurtinLib:0.1.1-ALPHA'
-    annotationProcessor 'com.github.Turtin:TurtinLib:0.1.1-ALPHA:processor'
+    implementation "com.github.Turtin:TurtinLib:${project.turtinlib_version}"
+    annotationProcessor "com.github.Turtin:TurtinLib:${project.turtinlib_version}:processor'"
 }
 ```
 
+Then go to `gradle.properties` and add the line:
+```gradle
+turtinlib_version={version}
+```
+
+Remember to replace {version} with a release or commit from https://jitpack.io/#Turtin/TurtinLib
