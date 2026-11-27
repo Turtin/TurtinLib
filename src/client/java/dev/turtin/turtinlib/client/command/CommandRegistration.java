@@ -83,7 +83,7 @@ public class CommandRegistration {
     }
 
     public static void register(Class<?> c) {
-        if (!Arrays.asList(c.getInterfaces()).contains(CommandHandler.class)) {
+        if (!CommandHandler.class.isAssignableFrom(c)) {
             throw new IllegalArgumentException("Given command class does not implement CommandHandler");
         }
 
