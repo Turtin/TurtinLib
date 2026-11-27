@@ -7,7 +7,6 @@ public class TurtinlibClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        CommandRegistration.SimpleRegistration.register(this.getClass());
-        CommandRegistration.register(TestCommand.class);
+//        CommandRegistration.register(TestCommand.class);
     }
 }
