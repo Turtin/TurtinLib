@@ -24,4 +24,4 @@ Then go to `gradle.properties` and add the line:
 turtinlib_version={version}
 ```
 
-Remember to replace {version} with a release or commit from https://jitpack.io/#Turtin/TurtinLib
+Remember to replace `{version}` with a release or commit from https://jitpack.io/#Turtin/TurtinLib
